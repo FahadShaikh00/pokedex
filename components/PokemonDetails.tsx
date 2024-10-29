@@ -18,6 +18,7 @@ type Pokemon = {
   };
   types: Array<{ type: { name: string } }>;
   abilities: Array<{ ability: { name: string } }>;
+  stats: Array<{ base_stat: number; stat: { name: string } }>;
   height: number;
   weight: number;
 };
@@ -47,6 +48,17 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
           Ability: {pokemon.abilities.map((t) => t.ability.name).join(", ")}
         </Text>
       </View>
+            <Text>
+              Moves: {pokemon.abilities.map((t) => t.ability.name).join(", ")}
+            </Text>
+            <View>
+              {pokemon.stats.map((t, index) => (
+                <Text key={`name-${index}`}>{t.stat.name}</Text>
+              ))}
+              {pokemon.stats.map((t, index) => (
+                <Text key={`stat-${index}`}>{t.base_stat}</Text>
+              ))}
+            </View>
 
       <Button title="Back" onPress={() => navigation.goBack()} />
     </View>
