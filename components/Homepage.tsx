@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
@@ -64,6 +65,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
   return (
     // <SafeAreaProvider>
     <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to Pokédex</Text>
 
@@ -95,6 +97,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
             </View>
           ) : null}
         </View>
+      </ScrollView>
     </SafeAreaView>
     // </SafeAreaProvider>
   );
