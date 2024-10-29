@@ -17,7 +17,11 @@ const App = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Homepage} />
+          <Stack.Screen
+            name="Home"
+            component={Homepage}
+            options={{ title: "Pokédex" }}
+          />
           <Stack.Screen name="PokeDetails" component={PokemonDetails} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { RootStackParamList } from "../App";
-import React from "react";
+import React, { useEffect } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PokeDetails">;
@@ -39,11 +39,16 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
   const route =
     useRoute<RouteProp<Record<string, RouteParams>, "PokeDetails">>();
   const { pokemon } = route.params;
+
+  useEffect(() => {
+    navigation.setOptions({ title: pokemon.name.toUpperCase() });
+  }, [navigation, pokemon.name]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text>
+          {/* <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text> */}
           <Text style={styles.pokemonID}>#{pokemon.id}</Text>
           <Image
             source={{ uri: pokemon.sprites.other.home.front_default }}
