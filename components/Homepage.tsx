@@ -73,14 +73,20 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
               <Text style={styles.error}>{error}</Text>
             ) : pokemon ? (
               <View style={styles.pokemonContainer}>
-                <Text style={styles.pokemonID}>#{pokemon.id}</Text>
-                <Image
-                  source={{ uri: pokemon.sprites.front_default }}
-                  style={styles.pokeImage}
-                />
-                <Text style={styles.pokemonName}>
-                  {pokemon.name.toUpperCase()}
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PokeDetails", { pokemon })
+                  }
+                >
+                  <Text style={styles.pokemonID}>#{pokemon.id}</Text>
+                  <Image
+                    source={{ uri: pokemon.sprites.front_default }}
+                    style={styles.pokeImage}
+                  />
+                  <Text style={styles.pokemonName}>
+                    {pokemon.name.toUpperCase()}
+                  </Text>
+                </TouchableOpacity>
               </View>
             ) : null}
 
