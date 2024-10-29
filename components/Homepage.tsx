@@ -18,7 +18,11 @@ type Pokemon = {
   id: number;
   name: string;
   sprites: {
-    front_default: string;
+    other: {
+      home: {
+        front_default: string;
+      };
+    };
   };
   types: Array<{ type: { name: string } }>;
   height: number;
@@ -28,6 +32,7 @@ type Pokemon = {
 const Homepage: React.FC<Props> = ({ navigation }) => {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [search, setSearch] = useState("");
+
   const [error, setError] = useState("");
 
   const pokeData = async (pokeName: string) => {
@@ -56,45 +61,41 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <>
-      <SafeAreaProvider>
-        <SafeAreaView>
-          <View style={styles.container}>
-            <Text style={styles.title}>Welcome to Pokédex</Text>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <View style={styles.container}>
+          <Text style={styles.title}>Welcome to Pokédex</Text>
 
-            <TextInput
-              style={styles.search}
-              value={search}
-              onChangeText={setSearch}
-              placeholder="Search"
-            />
-            <Button title="Search" onPress={handleSearch} />
-            {error ? (
-              <Text style={styles.error}>{error}</Text>
-            ) : pokemon ? (
-              <View style={styles.pokemonContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("PokeDetails", { pokemon })
-                  }
-                >
-                  <Text style={styles.pokemonID}>#{pokemon.id}</Text>
-                  <Image
-                    source={{ uri: pokemon.sprites.front_default }}
-                    style={styles.pokeImage}
-                  />
-                  <Text style={styles.pokemonName}>
-                    {pokemon.name.toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
-
-            <Button title="CARD" />
-          </View>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </>
+          <TextInput
+            style={styles.search}
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search"
+          />
+          <Button title="Search" onPress={handleSearch} />
+          {error ? (
+            <Text style={styles.error}>{error}</Text>
+          ) : pokemon ? (
+            <View style={styles.pokemonContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("PokeDetails", { pokemon })}
+              >
+                <Text style={styles.pokemonID}>#{pokemon.id}</Text>
+                <Image
+                  source={{
+                    uri: pokemon.sprites.other.home.front_default,
+                  }}
+                  style={styles.pokeImage}
+                />
+                <Text style={styles.pokemonName}>
+                  {pokemon.name.toUpperCase()}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     width: "80%",
     marginBottom: 10,
   },
-  resultItem: {},
+
   error: { color: "red", marginTop: 10 },
   pokemonContainer: { alignItems: "center", marginTop: 20 },
   pokemonID: { alignItems: "center" },
