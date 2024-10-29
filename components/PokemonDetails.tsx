@@ -7,9 +7,17 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PokeDetails">;
 type Pokemon = {
+  id: number;
   name: string;
-  sprites: { front_default: string };
+  sprites: {
+    other: {
+      home: {
+        front_default: string;
+      };
+    };
+  };
   types: Array<{ type: { name: string } }>;
+  abilities: Array<{ ability: { name: string } }>;
   height: number;
   weight: number;
 };
@@ -24,25 +32,31 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
   const { pokemon } = route.params;
   return (
     <View style={styles.container}>
-      <Text>Pokemon Details</Text>
       <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text>
+      <Text style={styles.pokemonID}>#{pokemon.id}</Text>
       <Image
-        source={{ uri: pokemon.sprites.front_default }}
+        source={{ uri: pokemon.sprites.other.home.front_default }}
         style={styles.pokeImage}
       />
-      <Text>Type(s): {pokemon.types.map((t) => t.type.name).join(", ")}</Text>
-      <Text>Height: {pokemon.height / 10} m</Text>
-      <Text>Weight: {pokemon.weight / 10} kg</Text>
+      <Text>{pokemon.types.map((t) => t.type.name).join(", ")}</Text>
+      <Text>About</Text>
+      <View>
+        <Text>Weight: {pokemon.weight / 10} kg</Text>
+        <Text>Height: {pokemon.height / 10} m</Text>
+        <Text>
+          Ability: {pokemon.abilities.map((t) => t.ability.name).join(", ")}
+        </Text>
+      </View>
+
       <Button title="Back" onPress={() => navigation.goBack()} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#002bff",
-  },
+  container: { alignItems: "center", justifyContent: "center" },
+  pokemonID: {},
   pokeName: {},
-  pokeImage: { width: 100, height: 100, marginVertical: 10 },
+  pokeImage: { width: 300, height: 300, marginVertical: 10 },
 });
 export default PokemonDetails;
