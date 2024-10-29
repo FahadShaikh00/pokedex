@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+// import { ScrollView } from "react-native-gesture-handler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 type Pokemon = {
@@ -61,8 +62,8 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView>
+    // <SafeAreaProvider>
+    <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to Pokédex</Text>
 
@@ -94,8 +95,8 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
             </View>
           ) : null}
         </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    </SafeAreaView>
+    // </SafeAreaProvider>
   );
 };
 

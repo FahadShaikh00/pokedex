@@ -1,5 +1,13 @@
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  ScrollView,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { RootStackParamList } from "../App";
 import React from "react";
@@ -32,22 +40,20 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
     useRoute<RouteProp<Record<string, RouteParams>, "PokeDetails">>();
   const { pokemon } = route.params;
   return (
-    <View style={styles.container}>
-      <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text>
-      <Text style={styles.pokemonID}>#{pokemon.id}</Text>
-      <Image
-        source={{ uri: pokemon.sprites.other.home.front_default }}
-        style={styles.pokeImage}
-      />
-      <Text>{pokemon.types.map((t) => t.type.name).join(", ")}</Text>
-      <Text>About</Text>
-      <View>
-        <Text>Weight: {pokemon.weight / 10} kg</Text>
-        <Text>Height: {pokemon.height / 10} m</Text>
-        <Text>
-          Ability: {pokemon.abilities.map((t) => t.ability.name).join(", ")}
-        </Text>
-      </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text>
+          <Text style={styles.pokemonID}>#{pokemon.id}</Text>
+          <Image
+            source={{ uri: pokemon.sprites.other.home.front_default }}
+            style={styles.pokeImage}
+          />
+          <Text>{pokemon.types.map((t) => t.type.name).join(", ")}</Text>
+          <Text>About</Text>
+          <View>
+            <Text>Weight: {pokemon.weight / 10} kg</Text>
+            <Text>Height: {pokemon.height / 10} m</Text>
             <Text>
               Moves: {pokemon.abilities.map((t) => t.ability.name).join(", ")}
             </Text>
@@ -59,9 +65,12 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
                 <Text key={`stat-${index}`}>{t.base_stat}</Text>
               ))}
             </View>
+          </View>
 
-      <Button title="Back" onPress={() => navigation.goBack()} />
-    </View>
+          <Button title="Back" onPress={() => navigation.goBack()} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
