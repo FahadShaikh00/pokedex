@@ -12,6 +12,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+import PokemonList from "./PokemonList";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 type Pokemon = {
@@ -97,6 +98,9 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           ) : null}
+          <View style={styles.pokeList}>
+            <PokemonList />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
