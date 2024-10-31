@@ -36,7 +36,6 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
 
   const pokeData = async (pokeName: string) => {
     if (!pokeName || typeof pokeName !== "string") {
-      setError("Invalid Pokemon Name.");
       setPokemon(null);
     }
     try {
@@ -47,7 +46,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
       setPokemon(response.data);
       setError("");
     } catch (err) {
-      setError("invalid");
+      setError("Invalid Pokemon Name.");
       setPokemon(null);
     }
   };
@@ -137,7 +136,16 @@ const styles = StyleSheet.create({
   },
   searchButtonText: { color: "white" },
 
-  error: { color: "red", marginTop: 10 },
+  error: {
+    color: "red",
+    backgroundColor: "white",
+    padding: 10,
+    width: "100%",
+    marginBottom: 10,
+    alignSelf: "center",
+    fontWeight: "700",
+    borderRadius: 10,
+  },
   pokeCard: {
     alignItems: "center",
     backgroundColor: "#fff",
