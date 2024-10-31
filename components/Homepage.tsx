@@ -67,15 +67,20 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.title}>Welcome to Pokédex</Text>
-
-          <TextInput
-            style={styles.search}
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search"
-          />
-          <Button title="Search" onPress={handleSearch} />
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            <TextInput
+              style={styles.search}
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search"
+            />
+            <TouchableOpacity
+              style={styles.searchButton}
+              onPress={handleSearch}
+            >
+              <Text style={styles.searchButtonText}>Search</Text>
+            </TouchableOpacity>
+          </View>
           {error ? (
             <Text style={styles.error}>{error}</Text>
           ) : pokemon ? (
@@ -119,6 +124,23 @@ const styles = StyleSheet.create({
     width: "80%",
     marginBottom: 10,
   },
+  searchButton: {
+    backgroundColor: "#007bff",
+    width: "20%",
+    height: 40,
+    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#479cfe",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 5,
+    shadowColor: "#000", // Shadow color
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  searchButtonText: { color: "white" },
 
   error: { color: "red", marginTop: 10 },
   pokemonContainer: { alignItems: "center", marginTop: 20 },
