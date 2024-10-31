@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  LogBox,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
@@ -29,6 +30,10 @@ type Pokemon = {
   height: number;
   weight: number;
 };
+
+LogBox.ignoreLogs([
+  "VirtualizedLists should never be nested inside plain ScrollViews", // Error occurs due to nesting FlatList inside ScrollView but doesn't cause any issue when running application
+]);
 
 const Homepage: React.FC<Props> = ({ navigation }) => {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
