@@ -47,6 +47,7 @@ const PokemonList = () => {
     }
   };
 
+  // Sorting function
   const sortPokemon = () => {
     const sortedList = [...pokemonList].sort((a, b) => {
       if (sortBy === "id") return a.id - b.id;
@@ -55,10 +56,12 @@ const PokemonList = () => {
     setPokemonList(sortedList);
   };
 
+  // Handle Sort Toggle
   const toggleSort = () => {
     setSortBy(sortBy === "id" ? "name" : "id");
   };
 
+  // Fetch on initial load and when offset or sortBy changes
   useEffect(() => {
     pokeList();
   }, [offset]);
@@ -67,11 +70,13 @@ const PokemonList = () => {
     sortPokemon();
   }, [sortBy]);
 
+  // Handle Pagination
   const handlePrev = () => setOffset(offset - 9);
   const handleNext = () => setOffset(offset + 9);
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      {/* Sort Button */}
       <View style={{ alignItems: "flex-end" }}>
         <TouchableOpacity
           onPress={toggleSort}
@@ -88,6 +93,7 @@ const PokemonList = () => {
         </TouchableOpacity>
       </View>
 
+      {/* Pokemon List */}
       {/* <TouchableOpacity
         onPress={() => navigation.navigate("PokeDetails", { pokemonList })}
       > */}
@@ -131,6 +137,7 @@ const PokemonList = () => {
       />
       {/* </TouchableOpacity> */}
 
+      {/* Next Button */}
       <Button title="Previous" onPress={handlePrev} />
       <Button title="Next" onPress={handleNext} />
     </View>

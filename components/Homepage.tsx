@@ -58,7 +58,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleSearch = () => {
-    setSearch(search.toLowerCase());
+    setSearch(search.toLowerCase()); //String to LowerCase when typed in UpperCase in search bar
     if (search.trim()) {
       pokeData(search);
     }

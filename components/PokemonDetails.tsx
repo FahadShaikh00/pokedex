@@ -47,6 +47,7 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
     useRoute<RouteProp<Record<string, RouteParams>, "PokeDetails">>();
   const { pokemon, pokeList } = route.params;
 
+  // Changes background color based on pokemon type
   const backgroundColors: { [key: string]: string } = {
     bug: "#A7B723",
     dark: "#75574C",
@@ -71,10 +72,12 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
   const primaryType = pokemon.types[0]?.type.name || "default";
   const backgroundColor =
     backgroundColors[primaryType] || backgroundColors.default;
+
   const capitalizeFirstLetter = (name: string) => {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   };
 
+  //Dynamic Header displays name of Pokemon searched or selected from Homepage
   useEffect(() => {
     navigation.setOptions({
       title: pokemon.name.toUpperCase(),
@@ -86,11 +89,16 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView>
       <ScrollView>
         <View style={[styles.container, { backgroundColor }]}>
+          {/* Pokemon ID */}
           <Text style={styles.pokeID}>#{pokemon.id}</Text>
+
+          {/* Pokemon Image */}
           <Image
             style={styles.pokeImage}
             source={{ uri: pokemon.sprites.other.home.front_default }}
           />
+
+          {/* About */}
           <View style={[styles.aboutContainer, {}]}>
             <Text style={[styles.pokeType, { backgroundColor }]}>
               {pokemon.types
@@ -103,6 +111,7 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
             <View style={{ flex: 1, flexDirection: "row" }}>
               <Text style={styles.aboutWeight}>{pokemon.weight / 10} kg</Text>
               <Text style={styles.aboutHeight}>{pokemon.height / 10} m</Text>
+
               <Text style={styles.aboutAbility}>
                 {pokemon.abilities
                   .map((t) => capitalizeFirstLetter(t.ability.name))
@@ -138,15 +147,9 @@ const PokemonDetails: React.FC<Props> = ({ navigation }) => {
                   paddingStart: 20,
                 }}
               >
-                {/* {pokemon.stats.map((t, index) => (
-                  <Text key={`name-${index}`}>{t.stat.name}</Text>
-                ))} */}
-                <Text>HP</Text>
-                <Text>ATK</Text>
-                <Text>DEF</Text>
-                <Text>SATK</Text>
-                <Text>SDEF</Text>
-                <Text>SPD</Text>
+                <Text>
+                  HP{"\n"}ATK{"\n"}DEF{"\n"}SATK{"\n"}SDEF{"\n"}SPD
+                </Text>
               </View>
               <View
                 style={{ flex: 1, flexDirection: "column", paddingStart: 20 }}
@@ -167,9 +170,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    alignItems: "center", // Align all items to the start
+    alignItems: "center",
     justifyContent: "center",
-    marginBottom: 30,
   },
   pokeID: {
     alignSelf: "flex-end",
@@ -205,11 +207,18 @@ const styles = StyleSheet.create({
   },
   aboutWeight: {
     alignSelf: "center",
-    borderColor: "black",
     fontSize: 20,
     width: "25%",
   },
-  aboutHeight: { alignSelf: "center", fontSize: 20, width: "25%" },
-  aboutAbility: { alignSelf: "center", fontSize: 20, width: "25%" },
+  aboutHeight: {
+    alignSelf: "center",
+    fontSize: 20,
+    width: "25%",
+  },
+  aboutAbility: {
+    alignSelf: "center",
+    fontSize: 20,
+    width: "25%",
+  },
 });
 export default PokemonDetails;
