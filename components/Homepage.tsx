@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TextInput,
   Image,
   TouchableOpacity,
@@ -13,7 +12,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
-// import { ScrollView } from "react-native-gesture-handler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 type Pokemon = {
@@ -34,7 +32,6 @@ type Pokemon = {
 const Homepage: React.FC<Props> = ({ navigation }) => {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [search, setSearch] = useState("");
-
   const [error, setError] = useState("");
 
   const pokeData = async (pokeName: string) => {
@@ -63,8 +60,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    // <SafeAreaProvider>
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#DC0A2D" }}>
       <ScrollView>
         <View style={styles.container}>
           <View style={{ flexDirection: "row", marginTop: 10 }}>
@@ -84,18 +80,19 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
           {error ? (
             <Text style={styles.error}>{error}</Text>
           ) : pokemon ? (
-            <View style={styles.pokemonContainer}>
+            <View style={styles.pokeContainer}>
               <TouchableOpacity
+                style={styles.pokeCard}
                 onPress={() => navigation.navigate("PokeDetails", { pokemon })}
               >
-                <Text style={styles.pokemonID}>#{pokemon.id}</Text>
+                <Text style={styles.pokeID}>#{pokemon.id}</Text>
                 <Image
                   source={{
                     uri: pokemon.sprites.other.home.front_default,
                   }}
                   style={styles.pokeImage}
                 />
-                <Text style={styles.pokemonName}>
+                <Text style={styles.pokeName}>
                   {pokemon.name.toUpperCase()}
                 </Text>
               </TouchableOpacity>
@@ -104,23 +101,21 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-    // </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
-    padding: 20,
+    paddingTop: 50,
+    padding: 10,
   },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
   search: {
     borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: 2,
+    borderRadius: 20,
+    backgroundColor: "white",
     padding: 10,
+    height: 40,
     width: "80%",
     marginBottom: 10,
   },
@@ -143,10 +138,24 @@ const styles = StyleSheet.create({
   searchButtonText: { color: "white" },
 
   error: { color: "red", marginTop: 10 },
-  pokemonContainer: { alignItems: "center", marginTop: 20 },
-  pokemonID: { alignItems: "center" },
-  pokemonName: { fontSize: 20, fontWeight: "bold" },
-  pokeImage: { width: 100, height: 100, marginVertical: 10 },
+  pokeCard: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    padding: 16,
+    width: "50%",
+    height: 200,
+    margin: 10,
+  },
+  pokeContainer: { alignItems: "flex-start", marginBottom: 20 },
+  pokeID: { alignItems: "center" },
+  pokeName: { fontSize: 20, fontWeight: "bold", paddingTop: 10 },
+  pokeImage: { width: 100, height: 100 },
+  pokeList: { backgroundColor: "white", borderRadius: 10 },
 });
 
 export default Homepage;
