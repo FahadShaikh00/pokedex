@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   LogBox,
+  FlatList,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
@@ -19,6 +20,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 type Pokemon = {
   id: number;
   name: string;
+  image: string;
   sprites: {
     other: {
       home: {
@@ -37,6 +39,7 @@ LogBox.ignoreLogs([
 
 const Homepage: React.FC<Props> = ({ navigation }) => {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
 
@@ -51,6 +54,7 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
       console.log(response.data);
       setPokemon(response.data);
       setError("");
+      return response.data;
     } catch (err) {
       setError("Invalid Pokemon Name.");
       setPokemon(null);
@@ -64,50 +68,108 @@ const Homepage: React.FC<Props> = ({ navigation }) => {
     }
   };
 
+  const fetchPokemonList = async () => {
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=100`
+      );
+      const data = await response.json();
+
+      const detailedData: Pokemon[] = await Promise.all(
+        data.results.map(async (result: { name: string }) => {
+          const res = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${result.name}`
+          );
+          return await res.json();
+        })
+      );
+      setPokemonList(detailedData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPokemonList();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#DC0A2D" }}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <TextInput
-              style={styles.search}
-              value={search}
-              onChangeText={setSearch}
-              placeholder="Search"
-            />
+      {/* <ScrollView> */}
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <TextInput
+            style={styles.search}
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search"
+          />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
+        {error ? (
+          <Text style={styles.error}>{error}</Text>
+        ) : pokemon ? (
+          <View style={styles.pokeContainer}>
             <TouchableOpacity
-              style={styles.searchButton}
-              onPress={handleSearch}
+              style={styles.pokeCard}
+              onPress={() => navigation.navigate("PokeDetails", { pokemon })}
             >
-              <Text style={styles.searchButtonText}>Search</Text>
+              <Text style={styles.pokeID}>#{pokemon.id}</Text>
+              <Image
+                source={{
+                  uri: pokemon.sprites.other.home.front_default,
+                }}
+                style={styles.pokeImage}
+              />
+              <Text style={styles.pokeName}>{pokemon.name.toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
-          {error ? (
-            <Text style={styles.error}>{error}</Text>
-          ) : pokemon ? (
-            <View style={styles.pokeContainer}>
+        ) : null}
+        {/* <View >
+          <PokemonList />
+        </View> */}
+        <View style={styles.pokeList}>
+          <FlatList
+            data={pokemonList}
+            key={(2).toString()}
+            keyExtractor={(item) => item.id.toString()}
+            // style={{ flexDirection: "row" }}
+            renderItem={({ item }: { item: Pokemon }) => (
               <TouchableOpacity
                 style={styles.pokeCard}
-                onPress={() => navigation.navigate("PokeDetails", { pokemon })}
+                onPress={() => {
+                  navigation.navigate("PokeDetails", { item });
+                }}
               >
-                <Text style={styles.pokeID}>#{pokemon.id}</Text>
-                <Image
-                  source={{
-                    uri: pokemon.sprites.other.home.front_default,
-                  }}
-                  style={styles.pokeImage}
-                />
-                <Text style={styles.pokeName}>
-                  {pokemon.name.toUpperCase()}
-                </Text>
+                <View style={styles.pokeListCard}>
+                  <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                    #{item.id}
+                  </Text>
+
+                  <Image
+                    source={{ uri: item.sprites.other.home.front_default }}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      marginRight: 10,
+                    }}
+                  />
+
+                  <Text
+                    style={{ fontSize: 18, marginLeft: 10, paddingTop: 10 }}
+                  >
+                    {item.name.toUpperCase()}
+                  </Text>
+                </View>
               </TouchableOpacity>
-            </View>
-          ) : null}
-          <View style={styles.pokeList}>
-            <PokemonList />
-          </View>
+            )}
+            numColumns={2}
+          />
         </View>
-      </ScrollView>
+      </View>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -172,7 +234,24 @@ const styles = StyleSheet.create({
   pokeID: { alignItems: "center" },
   pokeName: { fontSize: 20, fontWeight: "bold", paddingTop: 10 },
   pokeImage: { width: 100, height: 100 },
-  pokeList: { backgroundColor: "white", borderRadius: 10 },
+  pokeList: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  pokeListCard: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    padding: 16,
+    width: 150,
+    height: 150,
+    margin: 10,
+  },
 });
 
 export default Homepage;
